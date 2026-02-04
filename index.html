@@ -1,11 +1,108 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>XAUUSD Signal App</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#0b1220;color:#e8eefc}
+    .wrap{max-width:720px;margin:0 auto;padding:24px}
+    .card{background:#111a2e;border:1px solid #223055;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{padding:8px 12px;border-radius:999px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .buy{background:#0f2b1f;border:1px solid #1f6b45;color:#bff7d7}
+    .sell{background:#2b1414;border:1px solid #7a2b2b;color:#ffd0d0}
+    .wait{background:#2a2411;border:1px solid #7a6a2b;color:#ffe9a6}
+    .muted{opacity:.75;font-size:13px}
+    button{border:0;border-radius:12px;padding:12px 14px;font-weight:700;cursor:pointer}
+    .btn{background:#4cc9f0;color:#061018}
+    .btn2{background:#1b2746;color:#e8eefc;border:1px solid #2a3b66}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .box{background:#0d152a;border:1px solid #223055;border-radius:14px;padding:12px}
+    .val{font-size:20px;font-weight:800;margin-top:6px}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-  <h1>✅ OK NA</h1>
-  <p>Gumagana na ang GitHub Pages.</p>
+  <div class="wrap">
+    <h1 style="margin:0 0 14px;">XAUUSD Signal App</h1>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center;">
+        <div>
+          <div id="status" class="pill wait">⏳ WAIT</div>
+          <div class="muted" style="margin-top:8px;">Last update: <span id="time">—</span></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="toggle">Change Signal</button>
+          <button class="btn2" id="refresh">Update Time</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="box">
+          <div class="muted">Entry</div>
+          <div class="val" id="entry">—</div>
+        </div>
+        <div class="box">
+          <div class="muted">Stop Loss</div>
+          <div class="val" id="sl">—</div>
+        </div>
+        <div class="box">
+          <div class="muted">Take Profit 1</div>
+          <div class="val" id="tp1">—</div>
+        </div>
+        <div class="box">
+          <div class="muted">Take Profit 2</div>
+          <div class="val" id="tp2">—</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:14px;">
+      Demo lang muna ito. Kapag ready ka na, lalagyan natin ng real price/API at auto signal logic.
+    </p>
+  </div>
+
+  <script>
+    const el = (id) => document.getElementById(id);
+
+    const states = [
+      { key: "BUY",  cls: "buy",  icon: "🟢", entry: "2350.0", sl: "2342.0", tp1: "2358.0", tp2: "2366.0" },
+      { key: "SELL", cls: "sell", icon: "🔴", entry: "2350.0", sl: "2358.0", tp1: "2342.0", tp2: "2334.0" },
+      { key: "WAIT", cls: "wait", icon: "⏳", entry: "—",     sl: "—",     tp1: "—",     tp2: "—" }
+    ];
+
+    let i = 2;
+
+    function updateTime(){
+      const d = new Date();
+      el("time").textContent = d.toLocaleString();
+    }
+
+    function render(){
+      const s = states[i];
+      const st = el("status");
+      st.className = `pill ${s.cls}`;
+      st.textContent = `${s.icon} ${s.key}`;
+      el("entry").textContent = s.entry;
+      el("sl").textContent = s.sl;
+      el("tp1").textContent = s.tp1;
+      el("tp2").textContent = s.tp2;
+    }
+
+    el("toggle").addEventListener("click", () => {
+      i = (i + 1) % states.length;
+      updateTime();
+      render();
+    });
+
+    el("refresh").addEventListener("click", () => {
+      updateTime();
+    });
+
+    updateTime();
+    render();
+  </script>
 </body>
-</html>
+</html>.
